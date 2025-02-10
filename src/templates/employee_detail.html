@@ -1,0 +1,20 @@
+<div class="bg-white shadow-lg rounded-lg p-6 max-w-sm w-full">
+	<div class="flex items-center space-x-4">
+		<div>
+			<h2 class="text-xl font-semibold text-gray-800">{{employee.first_name}} {{employee.second_name}}</h2>
+			<p class="text-gray-600">{{employee.job_title}}</p>
+		</div>
+	</div>
+	<div class="mt-4 space-y-2">
+		<p class="text-gray-700"><span class="font-semibold">Salary:</span> {{employee.salary}}</p>
+		<p class="text-gray-700"><span class="font-semibold">Award:</span> {{employee.award}}</p>
+		<div class="flex items-center space-x-2">
+			<span class="font-semibold">Work Location:</span>
+			<span class="px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded-full">{{employee.work_location.value}}</span>
+		</div>
+		<div class="flex items-center space-x-2">
+			<span class="font-semibold">Workload:</span>
+			<span class="px-2 py-1 text-sm bg-green-100 text-green-800 rounded-full">{{employee.workload.value}}</span>
+		</div>
+	</div>
+</div>

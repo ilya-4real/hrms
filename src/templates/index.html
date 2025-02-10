@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>HRMS</title>
+		<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+		<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+	</head>
+	<body>
+		<header class="bg-white py-4">
+			<nav class="container mx-auto flex justify-center space-x-30">
+				<a href="#" class="text-gray-600 hover:text-black">General</a>
+				<a href="/departments" hx-get="/departments" hx-target="main" hx-swap="outerHTML" class="text-gray-600 hover:text-black" >Departments</a>
+				<a href="/employees" hx-get="/employees?page=1&page_size=10" hx-target="main" hx-swap="outerHTML" class="text-gray-600 hover:text-black">Employees</a>
+			</nav>
+		</header>
+		<main class="min-h-screen">
+			<p class="text-center mt-10">
+				General stats will be shown here
+			</p>
+		</main>
+		<footer class="bg-gray-800 py-6">
+			<div class="container mx-auto text-center text-white">
+				<p>&copy; BI students</p>
+				<div class="mt-2">
+					<a href="#" class="text-gray-400 hover:text-white mx-2">Contact Us</a>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>
