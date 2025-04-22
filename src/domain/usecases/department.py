@@ -11,15 +11,16 @@ class CreateDeaprtmentCommand(BaseCommand):
 
 
 @dataclass
-class CreateDeaprtmentUseCase(BaseUseCase[CreateDeaprtmentCommand, None]):
+class CreateDeaprtmentUseCase(BaseUseCase[CreateDeaprtmentCommand, Department]):
     department_gateway: DepartmentGateway
     db_session: DBSession
 
     @override
-    async def execute(self, command: CreateDeaprtmentCommand) -> None:
+    async def execute(self, command: CreateDeaprtmentCommand) -> Department:
         new_department = Department(command.name)
         await self.department_gateway.create_department(new_department)
         await self.db_session.commit()
+        return new_department
 
 
 @dataclass

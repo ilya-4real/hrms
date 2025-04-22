@@ -1,0 +1,16 @@
+
+<div class="bg-white p-6 rounded-lg shadow-md" >
+	<h2 class="text-xl font-bold mb-4">Employees</h2>
+	<div id="empl_container" class="space-y-4">
+		{% for employee in employees %}
+		<!-- Employee Card -->
+		<div class="bg-gray-100 p-4 rounded-lg" hx-get="/employees/{{employee.oid}}" hx-trigger="click" hx-target="main">
+			<p class="font-bold">{{employee.first_name}} {{employee.second_name}}</p>
+			<p class="text-gray-600">{{employee.department.name}} / {{employee.job_title}}</p>
+		</div>
+		{% endfor %}
+		<!-- Employee Card -->
+		<!-- Add more employee cards here -->
+		<button class="w-50 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Load more</button>
+	</div>
+</div>

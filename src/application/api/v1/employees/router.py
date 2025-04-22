@@ -3,7 +3,7 @@ from fastapi import APIRouter, Form, Query, Request
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
 from fastapi.templating import Jinja2Templates
 
-from application.api.v1.employees.schemas import AddEmployeeSchema
+from application.api.v1.employees.schemas import EmployeeSchema, UpdateEmployeeschema
 from application.api.v1.utils import Paginator
 from domain.usecases.employee import (
     AddEmployeeUseCase,
@@ -12,6 +12,8 @@ from domain.usecases.employee import (
     GetAllEmployeesUseCase,
     GetEmployeeCommand,
     GetEmployeeUsecase,
+    UpdateEmployeeCommand,
+    UpdateEmployeeUsecase,
 )
 
 
@@ -20,11 +22,16 @@ router = APIRouter(route_class=DishkaRoute, tags=["employees"], prefix="/employe
 
 @router.post("")
 async def add_employee(
-    employee: Annotated[AddEmployeeSchema, Form()],
+    request: Request,
+    employee: Annotated[EmployeeSchema, Form()],
     usecase: FromDishka[AddEmployeeUseCase],
+    templ: FromDishka[Jinja2Templates],
 ):
     command = AddEmlpoyeeCommand(**employee.model_dump())
-    await usecase.execute(command)
+    created_employee = await usecase.execute(command)
+    return templ.TemplateResponse(
+        request, "employee_card.html", context={"employee": created_employee}
+    )
 
 
 @router.get("")
@@ -55,3 +62,32 @@ async def get_employee_detail(
     return templ.TemplateResponse(
         request, "employee_detail.html", context={"employee": employee}
     )
+
+
+@router.get("/{employee_id}/update_form")
+async def get_update_form(
+    employee_id: str,
+    request: Request,
+    templ: FromDishka[Jinja2Templates],
+    usecase: FromDishka[GetEmployeeUsecase],
+):
+    print("requested to update employee with id", employee_id)
+    command = GetEmployeeCommand(employee_id)
+
+    employee = await usecase.execute(command)
+    return templ.TemplateResponse(
+        request, "employee_update_form.html", {"employee": employee}
+    )
+
+
+@router.put("/{employee_id}")
+async def update_employee(
+    employee_id: str,
+    employee: Annotated[UpdateEmployeeschema, Form()],
+    request: Request,
+    usecase: FromDishka[UpdateEmployeeUsecase],
+    templ: FromDishka[Jinja2Templates],
+):
+    command = UpdateEmployeeCommand(employee_id, **employee.model_dump())
+    empl = await usecase.execute(command)
+    return templ.TemplateResponse(request, "employee_detail.html", {"employee": empl})

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, FastAPI, Request, status
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from config.settings import AppSettings
 from fastapi.templating import Jinja2Templates
@@ -9,6 +10,7 @@ from application.api.v1.employees.router import router as empl_router
 
 
 def get_app() -> FastAPI:
+    static_files = StaticFiles(directory="src/static")
     settings = AppSettings()  # pyright: ignore
     app = FastAPI(
         debug=settings.DEBUG,
@@ -16,6 +18,7 @@ def get_app() -> FastAPI:
         description="System that helps HRs to do their job",
         default_response_class=HTMLResponse,
     )
+    app.mount("/static", static_files, name="static")
     app.include_router(router)
     app.include_router(dep_router)
     app.include_router(empl_router)

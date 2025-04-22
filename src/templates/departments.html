@@ -1,17 +1,42 @@
-<main class="min-h-screen">
-	<div class="grid grid-cols-1  m-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-		{% for dep in departments %}
-		<div class="bg-white rounded-lg shadow-md border-2 border-gray-100  border-opacity-25 p-6">
-			<h2 class="text-xl font-bold mb-2">{{dep.name}}</h2>
-			<p class="text-gray-600">{{dep.oid}}</p>
+<main class="min-h-screen bg-indigo-100">
+	<div class="flex">
+		<div class="w-1/4 bg-white p-6 shadow-lg">
+			<h2 class="text-xl font-bold mb-4">Statistics</h2>
+			<div class="space-y-4">
+				<!-- Statistic 1 -->
+				<div class="bg-gray-50 p-4 rounded-lg">
+					<p class="text-gray-600">Total Departments</p>
+					<p class="text-2xl font-bold">12</p>
+				</div>
+				<!-- Statistic 2 -->
+				<div class="bg-gray-50 p-4 rounded-lg">
+					<p class="text-gray-600">Active Employees</p>
+					<p class="text-2xl font-bold">356</p>
+				</div>
+				<!-- Statistic 3 -->
+				<div class="bg-gray-50 p-4 rounded-lg">
+					<p class="text-gray-600">Average KPI</p>
+					<p class="text-2xl font-bold">78%</p>
+				</div>
+			</div>
 		</div>
-		{% endfor %}
-		<div class="bg-white rounded-lg shadow-md border-2 border-dashed border-gray-300 p-6">
-			<form hx-post="/departments" hx-swap="none" id="create_dep">
-				<h2 class="text-xl font-bold mb-2">New department</h2>
-				<input type="text" name="department_name" required class="border-1 border-gray-400 rounded py-2">
-				<button type="submit" class="bg-gray-400 rounded px-4 py-2 text-white hover:bg-gray-600">Create</button>
-			</form>
+		<div class="flex-1 p-6">
+			<h2 class="text-xl font-bold mb-4">Departments</h2>
+			<div id="deprtments_container" class="grid grid-cols-3 gap-6">
+				{% for dep in departments %}
+				<div hx-get="departments/{{dep.oid}}/employees?page=1" hx-trigger="click" hx-target="main" class="bg-white p-6 rounded-lg shadow-lg">
+					<h3 class="text-lg font-bold mb-2">{{dep.name}}</h3>
+					<p class="text-gray-600">Employees: 3</p>
+				</div>
+				{% endfor %}
+				<div class="bg-white rounded-lg shadow-md border-3 border-dashed border-indigo-300 p-6">
+					<form hx-post="/departments" hx-target="#deprtments_container" hx-swap="afterbegin" id="create_dep">
+						<h2 class="text-xl font-bold mb-2">New department</h2>
+						<input type="text" name="department_name" required class="px-1 border-1 border-gray-300 rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+						<button type="submit" class="bg-indigo-600 rounded-lg px-4 py-2 text-white hover:bg-gray-600">Create</button>
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
 </main>

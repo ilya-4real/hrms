@@ -26,10 +26,26 @@ class EmployeeGateway(ABC):
         self.db_session = db_session
 
     @abstractmethod
-    async def add_employee(self, employee: Employee): ...
+    async def add_employee(self, employee: Employee) -> Employee: ...
 
     @abstractmethod
     async def get_all_employees(self, limit=0, offset=10) -> Sequence[Employee]: ...
 
     @abstractmethod
     async def get_employee_detail(self, employee_id: str) -> Employee: ...
+
+    @abstractmethod
+    async def get_employees_by_department(
+        self, department_oid: str, limit=0, offset=10
+    ) -> Sequence[Employee]: ...
+
+    @abstractmethod
+    async def update_employee(self, employee: Employee) -> Employee: ...
+
+
+class KPIGateway(ABC):
+    def __init__(self, db_session: AsyncSession) -> None:
+        self.db_session = db_session
+
+    @abstractmethod
+    async def upsert_kpi_value(self, employee_id: str, kpi_value: int) -> None: ...

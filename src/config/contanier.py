@@ -10,9 +10,10 @@ from fastapi.templating import Jinja2Templates
 
 from config.settings import AppSettings
 from domain.usecases.department import CreateDeaprtmentUseCase, GetAllDepartmentsUseCase
-from domain.usecases.employee import AddEmployeeUseCase, GetAllEmployeesUseCase, GetEmployeeUsecase
+from domain.usecases.employee import AddEmployeeUseCase, GetAllEmployeesUseCase, GetEmployeeUsecase, GetEmployeesByDepartmentUseCase, UpdateEmployeeUsecase
 from gateways.postgres.department import SQLDepartmentGateway
 from gateways.postgres.employee import SQLEmployeeGateway
+from gateways.postgres.kpi import SQLKPIGateway
 
 
 class AppProvider(Provider):
@@ -74,11 +75,27 @@ class AppProvider(Provider):
     ) -> GetAllEmployeesUseCase:
         gateway = SQLEmployeeGateway(db_session)
         return GetAllEmployeesUseCase(gateway, db_session)
+
     @provide(scope=Scope.REQUEST)
     async def get_employee_use_case(
         self, db_session: AsyncSession
     ) -> GetEmployeeUsecase:
         gateway = SQLEmployeeGateway(db_session)
         return GetEmployeeUsecase(gateway, db_session)
+
+    @provide(scope=Scope.REQUEST)
+    async def get_employee_by_dep_usecase(
+        self, db_session: AsyncSession
+    ) -> GetEmployeesByDepartmentUseCase:
+        gateway = SQLEmployeeGateway(db_session)
+        return GetEmployeesByDepartmentUseCase(gateway, db_session)
+
+    @provide(scope=Scope.REQUEST)
+    async def update_employee_usecase(
+        self, db_session: AsyncSession
+    ) -> UpdateEmployeeUsecase:
+        empl_gateway = SQLEmployeeGateway(db_session)
+        kpi_gateway =  SQLKPIGateway(db_session)
+        return UpdateEmployeeUsecase(empl_gateway, kpi_gateway, db_session)
 
 container = make_async_container(AppProvider())

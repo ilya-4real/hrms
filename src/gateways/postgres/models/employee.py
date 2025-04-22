@@ -1,9 +1,12 @@
+from datetime import date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import Date, ForeignKey, String
 from sqlalchemy.dialects.postgresql import ENUM as PGENUM
 
 from domain.entities.employee import Employee, WorkLocation, Workload
 from gateways.postgres.base import BaseORM
+from gateways.postgres.models.kpi_records import KPIRecord
+
 
 
 class EmployeeOrm(BaseORM):
@@ -20,9 +23,15 @@ class EmployeeOrm(BaseORM):
     job_title: Mapped[str] = mapped_column(String(50))
     salary: Mapped[int]
     award: Mapped[int]
+    current_kpi: Mapped[int] = mapped_column(default=0)
+    hire_date: Mapped[date] = mapped_column(Date())
+    email_address: Mapped[str] = mapped_column(String(50), unique=True)
+    sm_link: Mapped[str] = mapped_column(unique=True)
     department_id: Mapped[str] = mapped_column(ForeignKey("departments.oid"))
 
     department: Mapped["DepartmentORM"] = relationship(back_populates="employees")  # type: ignore  # noqa: F821
+    kpi_records: Mapped["KPIRecord"] = relationship(back_populates="employee")
+
 
     @classmethod
     def from_entity(cls, entity: Employee) -> "EmployeeOrm":
@@ -36,6 +45,9 @@ class EmployeeOrm(BaseORM):
             salary=entity.salary,
             award=entity.award,
             department_id=entity.department_id,
+            email_address=entity.email_address,
+            sm_link=entity.sm_link,
+            hire_date=entity.hire_date
         )
     
     def to_entity(self) -> Employee:
@@ -48,5 +60,8 @@ class EmployeeOrm(BaseORM):
             work_location=self.work_location,
             salary=self.salary,
             award=self.award,
+            email_address=self.email_address,
+            sm_link=self.sm_link,
             department_id=self.department_id,
+            department=self.department.to_entity()
         )

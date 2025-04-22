@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from config.settings import AppSettings
 from gateways.postgres.models.department import DepartmentORM  # noqa: F401
 from gateways.postgres.models.employee import EmployeeOrm  # noqa: F401
+from gateways.postgres.models.kpi_records import KPIRecord  # noqa: F401
 
 
 from alembic import context

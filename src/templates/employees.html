@@ -1,10 +1,10 @@
-<main class="bg-gray-100 p-6 min-h-screen">
+<main class="bg-blue-50 p-6 min-h-screen">
   <div class="container mx-auto">
     <!-- Grid with custom column widths -->
     <div class="grid grid-cols-5 gap-6"> <!-- Changed to 5 columns -->
       <!-- First Column: General Statistics -->
       <div class="col-span-1 bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-bold mb-4">General Statistics</h2>
+        <h2 class="text-xl font-bold mb-4">Statistics</h2>
         <div class="space-y-4">
           <div>
             <p class="text-gray-600">Total Employees</p>
@@ -22,70 +22,85 @@
       </div>
 
       <!-- Second Column: Employee Cards (Wider) -->
-      <div class="col-span-3 bg-white p-6 rounded-lg shadow-md" >
+      <div class="col-span-2 bg-white p-6 rounded-lg shadow-md" >
         <h2 class="text-xl font-bold mb-4">Employees</h2>
-        <div class="space-y-4">
+        <div id="empl_container" class="space-y-4">
 		{% for employee in employees %}
-          <!-- Employee Card -->
-					<div class="bg-gray-100 p-4 rounded-lg" hx-get="/employees/{{employee.oid}}" hx-trigger="click" hx-target="main">
+					<!-- Employee Card -->
+					<div class="bg-indigo-50 p-4 rounded-lg" hx-get="/employees/{{employee.oid}}" hx-trigger="click" hx-target="main">
 						<p class="font-bold">{{employee.first_name}} {{employee.second_name}}</p>
-						<p class="text-gray-600">{{employee.job_title}}</p>
-            <p class="text-gray-600">john.doe@example.com</p>
-          </div>
+						<p class="text-gray-600">{{employee.department.name}} / {{employee.job_title}}</p>
+					</div>
 		{% endfor %}
           <!-- Employee Card -->
           <!-- Add more employee cards here -->
-			<button class="w-50 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Load more</button>
+			<button class="w-50 bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Load more</button>
         </div>
       </div>
 
       <!-- Third Column: Add Employee Form -->
-      <div class="col-span-1 bg-white p-6 rounded-lg shadow-md">
+      <div class="col-span-2 bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-xl font-bold mb-4">Add New Employee</h2>
-        <form class="space-y-4" hx-post="/employees" hx-swap="none">
-          <div>
-            <label class="block text-gray-700">First name</label>
-            <input name="first_name" type="text" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-          </div>
-          <div>
-            <label class="block text-gray-700">Second name</label>
-            <input name="second_name" type="text" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-          </div>
+        <form class="space-y-5" hx-post="/employees" hx-target="#empl_container" hx-swap="afterbegin">
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label class="block text-gray-700 mr-5">First name</label>
+							<input name="first_name" type="text" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+						</div>
+						<div>
+							<label class="block text-gray-700">Second name</label>
+							<input name="second_name" type="text" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+						</div>
+					</div>
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label class="block text-gray-700 mr-5">Email</label>
+							<input name="email" type="email" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+						</div>
+						<div>
+							<label class="block text-gray-700">Social media</label>
+							<input name="sm_link" type="url" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+						</div>
+					</div>
           <div>
             <label class="block text-gray-700">Position</label>
-            <input name="job_title" type="text" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input name="job_title" type="text" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
-          <div>
-            <label class="block text-gray-700">Salary</label>
-            <input name="salary" type="number" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-          </div>
-          <div>
-            <label class="block text-gray-700">Award</label>
-            <input name="award" type="number" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-          </div>
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label class="block text-gray-700">Salary</label>
+							<input name="salary" type="number" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+						</div>
+						<div>
+							<label class="block text-gray-700">Award</label>
+							<input name="award" type="number" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+						</div>
+					</div>
           <div>
             <label class="block text-gray-700">Department</label>
-			<select hx-get="/departments/options" hx-trigger="load" hx-swap="innerHTML" name="department_id" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+			<select hx-get="/departments/options" hx-target="this" hx-trigger="load" hx-swap="innerHTML" name="department_id" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
 				<<option value="none">Loading deps...</option>
 			</select>
           </div>
+					<div class="flex gap-5">
+						<div>
+							<label class="block text-gray-700">Workload</label>
+							<select name="workload" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+								<option value="fulltime">Fulltime</option>
+								<option value="parttime">Parttime</option>
+							</select>
+						</div>
+						<div>
+							<label class="block text-gray-700">Location</label>
+							<select name="work_location" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+								<option value="remote">Remote</option>
+								<option value="hybrid">Hybrid</option>
+								<option value="office">Office</option>
+							</select>
+						</div>
+					</div>
           <div>
-            <label class="block text-gray-700">Workload</label>
-			<select name="workload" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-				<option value="fulltime">Fulltime</option>
-				<option value="parttime">Parttime</option>
-			</select>
-          </div>
-          <div>
-            <label class="block text-gray-700">Location</label>
-			<select name="work_location" class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-				<option value="remote">Remote</option>
-				<option value="hybrid">Hybrid</option>
-				<option value="office">Office</option>
-			</select>
-          </div>
-          <div>
-            <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Add Employee</button>
+            <button type="submit" class="w-full bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Add Employee</button>
           </div>
         </form>
       </div>
