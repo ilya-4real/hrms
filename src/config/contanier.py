@@ -17,7 +17,7 @@ from domain.usecases.employee import (
     GetEmployeesByDepartmentUseCase,
     UpdateEmployeeUsecase,
 )
-from domain.usecases.event import CreateEventUseCase, GetCurrentEventsUseCase
+from domain.usecases.event import CreateEventUseCase, DeleteEventUsecase, GetCurrentEventsUseCase
 from gateways.postgres.department import SQLDepartmentGateway
 from gateways.postgres.employee import SQLEmployeeGateway
 from gateways.postgres.event import SQLEventGateway
@@ -121,5 +121,11 @@ class AppProvider(Provider):
         return GetCurrentEventsUseCase(event_gateway, db_session)
 
 
+    @provide(scope=Scope.REQUEST)
+    async def delete_event_usecase(
+            self, db_session: AsyncSession
+    ) -> DeleteEventUsecase:
+        event_gateway = SQLEventGateway(db_session)
+        return DeleteEventUsecase(event_gateway, db_session)
 
 container = make_async_container(AppProvider())

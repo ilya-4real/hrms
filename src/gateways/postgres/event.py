@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import override
 
-from sqlalchemy import Date, asc, cast, select
+from sqlalchemy import Date, asc, cast, delete, select
 from domain.entities.event import Event
 from domain.interfaces import EventGateway
 from gateways.postgres.models.events import EventORM
@@ -24,3 +24,8 @@ class SQLEventGateway(EventGateway):
     async def create_event(self, event: Event) -> Event:
         self.db_session.add(EventORM.from_entity(event))
         return event
+
+    @override
+    async def delete_event(self, event_oid: str) -> None:
+        stmt = delete(EventORM).where(EventORM.oid == event_oid)
+        await self.db_session.execute(stmt)

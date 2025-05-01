@@ -43,3 +43,18 @@ class GetCurrentEventsUseCase(BaseUseCase):
         print(events)
         await self.db_session.rollback()
         return events
+
+
+@dataclass
+class DeleteEventCommand(BaseCommand):
+    event_oid: str
+
+@dataclass
+class DeleteEventUsecase(BaseUseCase):
+    event_gateway: EventGateway
+    db_session: DBSession
+
+    @override
+    async def execute(self, command: DeleteEventCommand) -> None:
+        await self.event_gateway.delete_event(command.event_oid)
+        await self.db_session.commit()

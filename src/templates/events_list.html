@@ -1,10 +1,10 @@
 <div id="events" class="my-5">
 	{% for event in events %}
-	<div class="flex justify-between bg-indigo-50 p-4 rounded-lg mb-4">
+	<div id="{{ event.oid }}" class="flex justify-between bg-indigo-50 p-4 rounded-lg mb-4" hx-target="this">
 		<p class="text-lg text-gray-600">{{ event.title }}</p>
 		<div class="text-blue-500 flex">
 			<p class="mr-5">{{ event.starts_at.strftime("%B %d, %I:%M %p") }}</p>
-			<button hx-delete="/events/{{event.oid}}" hx-confirm="Are you sure you want to delete this event?">
+			<button hx-delete="/events/{{event.oid}}" hx-confirm="Are you sure you want to delete this event?" hx-swap="outerHTML">
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
 				</svg>

@@ -63,3 +63,7 @@ class EventGateway(ABC):
     @abstractmethod
     async def get_current_events(self) -> list[Event]:
         ...
+
+    @abstractmethod
+    async def delete_event(self, event_oid: str) -> None:
+        ...

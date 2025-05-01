@@ -7,6 +7,8 @@ from application.api.v1.events.schemas import CreateEventShema
 from domain.usecases.event import (
     CreateEventCommand,
     CreateEventUseCase,
+    DeleteEventCommand,
+    DeleteEventUsecase,
     GetCurrentEvents,
     GetCurrentEventsUseCase,
 )
@@ -40,3 +42,9 @@ async def get_current_events(
     return templ.TemplateResponse(
         request, "events_list.html", context={"events": events}
     )
+
+
+@router.delete("/{event_oid}")
+async def delet_event(event_oid: str, usecase: FromDishka[DeleteEventUsecase]) -> None:
+    command = DeleteEventCommand(event_oid)
+    await usecase.execute(command)
