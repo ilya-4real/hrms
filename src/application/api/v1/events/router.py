@@ -8,6 +8,7 @@ router = APIRouter(prefix="/events", tags=["events"])
 
 @router.post("")
 async def create_new_event(event: Annotated[CreateEventShema, Form()]):
+    print(event)
     return
 
 @router.get("/current")

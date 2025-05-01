@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from domain.entities.department import Department
 from domain.entities.employee import Employee
+from domain.entities.event import Event
 
 
 class DepartmentGateway(ABC):
@@ -49,3 +50,16 @@ class KPIGateway(ABC):
 
     @abstractmethod
     async def upsert_kpi_value(self, employee_id: str, kpi_value: int) -> None: ...
+
+
+class EventGateway(ABC):
+    def __init__(self, db_session: AsyncSession) -> None:
+        self.db_session = db_session
+
+    @abstractmethod
+    async def create_event(self, event: Event) -> Event:
+        ...
+
+    @abstractmethod
+    async def get_current_events(self) -> list[Event]:
+        ...
