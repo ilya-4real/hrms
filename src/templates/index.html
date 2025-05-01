@@ -41,14 +41,14 @@
 							</div>
 							<!-- end of event card -->
 						</div>
-						<form hx-post="/events">
+						<form hx-post="/events" hx-target="#events" hx-swap="afterbegin">
 							<h1 class="text-center text-xl text-gray-600">
 								Create new event
 							</h1>
 							<div class="grid grid-cols-3 gap-4">
 								<input type="text" name="title" placeholder="Event title" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
 								<input type="datetime-local" name="starts_at" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-								<button type="submit" class="py-2 px-4 rounded-lg bg-indigo-500 text-white hover:bg-blue-600">Create</button>
+								<button type="submit" class="py-2 px-4 rounded-lg bg-indigo-400 text-white hover:bg-blue-600">Create</button>
 							</div>
 						</form>
 					</div>

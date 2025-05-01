@@ -4,7 +4,12 @@ from fastapi import APIRouter, Form, Request
 from fastapi.templating import Jinja2Templates
 
 from application.api.v1.events.schemas import CreateEventShema
-from domain.usecases.event import CreateEventCommand, CreateEventUseCase, GetCurrentEvents, GetCurrentEventsUseCase
+from domain.usecases.event import (
+    CreateEventCommand,
+    CreateEventUseCase,
+    GetCurrentEvents,
+    GetCurrentEventsUseCase,
+)
 
 
 router = APIRouter(route_class=DishkaRoute, prefix="/events", tags=["events"])
@@ -12,17 +17,26 @@ router = APIRouter(route_class=DishkaRoute, prefix="/events", tags=["events"])
 
 @router.post("")
 async def create_new_event(
-    event: Annotated[CreateEventShema, Form()], usecase: FromDishka[CreateEventUseCase]
+    request: Request,
+    event: Annotated[CreateEventShema, Form()],
+    usecase: FromDishka[CreateEventUseCase],
+    templ: FromDishka[Jinja2Templates],
 ):
     command = CreateEventCommand(event.title, event.starts_at)
     new_event = await usecase.execute(command)
-    print(event)
-    return str(new_event)
+    return templ.TemplateResponse(
+        request, "event_card.html", context={"event": new_event}
+    )
 
 
 @router.get("/current")
-async def get_current_events(request: Request, usecase: FromDishka[GetCurrentEventsUseCase], templ: FromDishka[Jinja2Templates]):
+async def get_current_events(
+    request: Request,
+    usecase: FromDishka[GetCurrentEventsUseCase],
+    templ: FromDishka[Jinja2Templates],
+):
     command = GetCurrentEvents()
     events = await usecase.execute(command)
-    return templ.TemplateResponse(request, "events_list.html", context={"events": events})
-
+    return templ.TemplateResponse(
+        request, "events_list.html", context={"events": events}
+    )
