@@ -34,21 +34,20 @@
 						<h1 class="text-center text-xl text-gray-600">
 							Events for today
 						</h1>
-						<div id="events" class="my-5">
-							<div class="flex justify-between bg-indigo-50 p-4 rounded-lg">
-								<p class="text-lg text-gray-600">Interview with Ivan</p>
-								<div class="text-indigo-700">
-									<p>May 2, 2025 at 2:30 PM</p>
-								</div>
+						<div id="events" class="my-5" hx-get="/events/current" hx-trigger="load" hx-target="#events"> 
+							<!-- event card  -->
+							<div class="flex justify-between bg-indigo-50 p-4 rounded-lg mb-4">
+								<p class="text-lg text-gray-600">There is no events for today</p>
 							</div>
+							<!-- end of event card -->
 						</div>
-						<form>
+						<form hx-post="/events">
 							<h1 class="text-center text-xl text-gray-600">
 								Create new event
 							</h1>
 							<div class="grid grid-cols-3 gap-4">
-								<input type="text" placeholder="Event title" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-								<input type="datetime-local" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+								<input type="text" name="title" placeholder="Event title" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+								<input type="datetime-local" name="starts_at" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
 								<button type="submit" class="py-2 px-4 rounded-lg bg-indigo-500 text-white hover:bg-blue-600">Create</button>
 							</div>
 						</form>

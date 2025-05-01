@@ -40,5 +40,6 @@ class GetCurrentEventsUseCase(BaseUseCase):
     @override
     async def execute(self, command: GetCurrentEvents) -> list[Event]:
         events = await self.event_gateway.get_current_events()
+        print(events)
         await self.db_session.rollback()
         return events

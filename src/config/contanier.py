@@ -10,9 +10,17 @@ from fastapi.templating import Jinja2Templates
 
 from config.settings import AppSettings
 from domain.usecases.department import CreateDeaprtmentUseCase, GetAllDepartmentsUseCase
-from domain.usecases.employee import AddEmployeeUseCase, GetAllEmployeesUseCase, GetEmployeeUsecase, GetEmployeesByDepartmentUseCase, UpdateEmployeeUsecase
+from domain.usecases.employee import (
+    AddEmployeeUseCase,
+    GetAllEmployeesUseCase,
+    GetEmployeeUsecase,
+    GetEmployeesByDepartmentUseCase,
+    UpdateEmployeeUsecase,
+)
+from domain.usecases.event import CreateEventUseCase, GetCurrentEventsUseCase
 from gateways.postgres.department import SQLDepartmentGateway
 from gateways.postgres.employee import SQLEmployeeGateway
+from gateways.postgres.event import SQLEventGateway
 from gateways.postgres.kpi import SQLKPIGateway
 
 
@@ -95,7 +103,23 @@ class AppProvider(Provider):
         self, db_session: AsyncSession
     ) -> UpdateEmployeeUsecase:
         empl_gateway = SQLEmployeeGateway(db_session)
-        kpi_gateway =  SQLKPIGateway(db_session)
+        kpi_gateway = SQLKPIGateway(db_session)
         return UpdateEmployeeUsecase(empl_gateway, kpi_gateway, db_session)
+    
+    @provide(scope=Scope.REQUEST)
+    async def create_event_usecase(
+            self, db_session: AsyncSession
+    ) -> CreateEventUseCase:
+        event_gateway = SQLEventGateway(db_session)
+        return CreateEventUseCase(event_gateway, db_session)
+
+    @provide(scope=Scope.REQUEST)
+    async def get_current_events_usecase(
+            self, db_session: AsyncSession
+    ) -> GetCurrentEventsUseCase:
+        event_gateway = SQLEventGateway(db_session)
+        return GetCurrentEventsUseCase(event_gateway, db_session)
+
+
 
 container = make_async_container(AppProvider())

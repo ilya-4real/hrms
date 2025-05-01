@@ -10,8 +10,9 @@ from gateways.postgres.models.events import EventORM
 class SQLEventGateway(EventGateway):
     @override
     async def get_current_events(self) -> list[Event]:
+        today = datetime.now().date()
         query = select(EventORM).where(
-            cast(EventORM.starts_at, Date) == datetime.today()
+            cast(EventORM.starts_at, Date) == today
         )
         result = await self.db_session.execute(query)
         events = result.scalars().all()
