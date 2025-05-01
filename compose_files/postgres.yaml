@@ -1,11 +1,15 @@
 services:
-   database:
-     image: postgres:latest
-     container_name: postgres_db
-     environment:
-       POSTGRES_USER: ${POSTGRES_USER}
-       POSTGRES_DB: ${POSTGRES_DB}
-       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-     ports:
-       - 5432:${POSTGRES_PORT}
- 
+  database:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - 5432:${POSTGRES_PORT}
+    volumes:
+      - hrms_db:/var/lib/postgresql/data
+
+volumes:
+  hrms_db:

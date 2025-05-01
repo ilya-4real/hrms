@@ -32,8 +32,11 @@
 				<div class="bg-white rounded-lg shadow-md border-3 border-dashed border-indigo-300 p-6">
 					<form hx-post="/departments" hx-target="#deprtments_container" hx-swap="afterbegin" id="create_dep">
 						<h2 class="text-xl font-bold mb-2">New department</h2>
-						<input type="text" name="department_name" required class="px-1 border-1 border-gray-300 rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-						<button type="submit" class="bg-indigo-600 rounded-lg px-4 py-2 text-white hover:bg-gray-600">Create</button>
+						<input type="text" name="department_name" required class="px-1 border-1 border-gray-300 rounded-lg py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full">
+						<div class="flex mt-3">
+
+						<button type="submit" class="mx-auto bg-indigo-600 rounded-lg px-4 py-2 text-white hover:bg-gray-600">Create</button>
+						</div>
 					</form>
 				</div>
 			</div>
