@@ -26,10 +26,8 @@ class CreateEventUseCase(BaseUseCase):
         return event
 
 
-
 @dataclass
-class GetCurrentEvents(BaseCommand):
-    ...
+class GetCurrentEvents(BaseCommand): ...
 
 
 @dataclass
@@ -49,6 +47,7 @@ class GetCurrentEventsUseCase(BaseUseCase):
 class DeleteEventCommand(BaseCommand):
     event_oid: str
 
+
 @dataclass
 class DeleteEventUsecase(BaseUseCase):
     event_gateway: EventGateway
@@ -58,3 +57,23 @@ class DeleteEventUsecase(BaseUseCase):
     async def execute(self, command: DeleteEventCommand) -> None:
         await self.event_gateway.delete_event(command.event_oid)
         await self.db_session.commit()
+
+
+@dataclass
+class GetEventsHistoryCommand(BaseCommand):
+    limit: int
+    offset: int
+
+
+@dataclass
+class GetEventsHistoryUseCase(BaseUseCase):
+    event_gateway: EventGateway
+    db_session: DBSession
+
+    @override
+    async def execute(self, command: GetEventsHistoryCommand) -> list[Event]:
+        events = await self.event_gateway.get_events_history(
+            command.limit, command.offset
+        )
+        await self.db_session.rollback()
+        return events
