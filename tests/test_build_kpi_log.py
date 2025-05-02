@@ -81,4 +81,7 @@ def test_build_log():
     ]
 
     assert len(built) == 12
-    assert built == should_be
+    for b, s in zip(built, should_be):
+        assert b.value == s.value
+        assert b.employee_id == s.employee_id
+        assert b.last_date == s.last_date

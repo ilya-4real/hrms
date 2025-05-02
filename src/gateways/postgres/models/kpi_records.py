@@ -1,14 +1,18 @@
 from datetime import date
-from sqlalchemy import Date, ForeignKey
+from sqlalchemy import Date, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from gateways.postgres.base import BaseORM
 
 
-class KPIRecord(BaseORM):
+class KPIRecordORM(BaseORM):
     __tablename__ = "kpi_records"
+    __table_args__ = (
+        UniqueConstraint("date_added", "employee_oid", name="unique_date_employee_kpi"),
+    )
 
-    date_added: Mapped[date] = mapped_column(Date, primary_key=True)
+    oid: Mapped[str] = mapped_column(primary_key=True)
+    date_added: Mapped[date] = mapped_column(Date)
     value: Mapped[int] = mapped_column()
     employee_oid: Mapped[str] = mapped_column(ForeignKey("employees.oid"))
 
-    employee: Mapped["EmployeeOrm"] = relationship(back_populates="kpi_records")
+    employee: Mapped["EmployeeOrm"] = relationship(back_populates="kpi_records")  # noqa: F821

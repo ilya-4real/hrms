@@ -5,7 +5,7 @@ from sqlalchemy.dialects.postgresql import ENUM as PGENUM
 
 from domain.entities.employee import Employee, WorkLocation, Workload
 from gateways.postgres.base import BaseORM
-from gateways.postgres.models.kpi_records import KPIRecord
+from gateways.postgres.models.kpi_records import KPIRecordORM
 
 
 
@@ -30,7 +30,7 @@ class EmployeeOrm(BaseORM):
     department_id: Mapped[str] = mapped_column(ForeignKey("departments.oid"))
 
     department: Mapped["DepartmentORM"] = relationship(back_populates="employees")  # type: ignore  # noqa: F821
-    kpi_records: Mapped["KPIRecord"] = relationship(back_populates="employee")
+    kpi_records: Mapped["KPIRecordORM"] = relationship(back_populates="employee")
 
 
     @classmethod

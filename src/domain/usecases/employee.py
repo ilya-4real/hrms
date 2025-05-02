@@ -1,7 +1,8 @@
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from typing import Sequence, override
 
 from domain.entities.employee import Employee, WorkLocation, Workload
+from domain.entities.kpi import KPIRecord
 from domain.interfaces import EmployeeGateway, KPIGateway
 from domain.usecases.base import BaseCommand, BaseUseCase, DBSession
 
@@ -142,7 +143,8 @@ class UpdateEmployeeUsecase(BaseUseCase[UpdateEmployeeCommand, Employee]):
             workload=command.workload,
             work_location=command.work_location
         )
+        kpi_record = KPIRecord(command.kpi_value, command.employee_oid)
         await self.employee_gateway.update_employee(employee)
-        await self.kpi_gateway.upsert_kpi_value(command.employee_oid, command.kpi_value)
+        await self.kpi_gateway.upsert_kpi_value(kpi_record)
         await self.db_session.commit()
         return employee

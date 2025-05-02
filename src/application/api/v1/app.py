@@ -6,7 +6,6 @@ from config.settings import AppSettings
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import APIRouter, FastAPI, Request, status
 from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 

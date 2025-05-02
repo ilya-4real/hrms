@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 from datetime import date
 from collections import deque
 
+from domain.entities.base import BaseEntity
+
 
 def first_day_of_this_month() -> date:
     today = date.today()
@@ -9,7 +11,7 @@ def first_day_of_this_month() -> date:
 
 
 @dataclass
-class KPIRecord:
+class KPIRecord(BaseEntity):
     value: int | None
     employee_id: str
     last_date: date = field(default_factory=lambda: first_day_of_this_month())
