@@ -36,3 +36,8 @@ router = APIRouter(tags=["index"])
 @router.get("/", status_code=status.HTTP_200_OK, description="returns root html page")
 async def root(request: Request):
     return templates.TemplateResponse(request, "index.html")
+
+
+@router.get("/main_content")
+async def main_page_content(request: Request):
+    return templates.TemplateResponse(request, "main.html")

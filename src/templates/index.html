@@ -11,87 +11,12 @@
 	<body>
 		<header class="bg-white py-4">
 			<nav class="container mx-auto flex justify-center space-x-30">
-				<a href="#" class="text-gray-600 hover:text-black">General</a>
+				<a href="/main_content" hx-get="/main_content" hx-target="main" class="text-gray-600 hover:text-black">General</a>
 				<a href="/departments" hx-get="/departments" hx-target="main" hx-swap="outerHTML" class="text-gray-600 hover:text-black" >Departments</a>
 				<a href="/employees" hx-get="/employees?page=1" hx-target="main" hx-swap="outerHTML" class="text-gray-600 hover:text-black">Employees</a>
 			</nav>
 		</header>
-		<main class="min-h-screen bg-indigo-100">
-			<div class="grid grid-cols-4 gap-6 pt-5">
-				<div class="col-span-1 bg-white shadow-lg">
-					<h1 class="text-xl text-gray-600">
-						About company
-					</h1>
-					<h3>
-						Departments
-					</h3>
-					<h3>
-						Employees
-					</h3>
-				</div>
-				<div class="col-span-2">
-					<div class="bg-white shadow-lg mb-6 p-5">
-						<h1 class="text-center text-xl text-gray-600">
-							Events for today
-						</h1>
-						<div id="events" class="my-5" hx-get="/events/current" hx-trigger="load" hx-target="#events"> 
-							<!-- event card  -->
-							<div class="flex justify-between bg-indigo-50 p-4 rounded-lg mb-4">
-								<p class="text-lg text-gray-600">There is no events for today</p>
-							</div>
-							<!-- end of event card -->
-						</div>
-						<div class="flex justify-end">
-							<a href="/#" class="flex">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-								</svg>
-								<p class="mx-3 text-gray-700">Events history</p>
-							</a>
-						</div>
-						<form hx-post="/events" hx-target="#events" hx-swap="afterbegin">
-							<h1 class="text-center text-xl text-gray-600">
-								Create new event
-							</h1>
-							<div class="grid grid-cols-3 gap-4">
-								<input type="text" name="title" placeholder="Event title" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-								<input type="datetime-local" name="starts_at" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-								<button type="submit" class="py-2 px-4 rounded-lg bg-indigo-400 text-white hover:bg-blue-600">Create</button>
-							</div>
-						</form>
-					</div>
-				</div>
-				<div class="col-span-1 bg-white shadow-lg p-5">
-					<div>
-						<h1 class="text-center text-xl text-gray-600">
-							Headcount by departments
-						</h1>
-						<div>
-							<canvas id="headcount_by_department"></canvas>
-							<script>
-							function InitHeadCountChart() {
-								let canvas = document.getElementById("headcount_by_department")
-								headcount_chart = new Chart(canvas, {
-									type: 'doughnut',
-									data: {
-										labels: ["development", "QA", "Accounting"],
-										datasets: [{
-											label: "Headcount by departments",
-											data: [39, 12, 22]
-										}]
-									}
-								})
-							}
-							InitHeadCountChart()
-							</script>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="flex">
-				<div id="stats">
-				</div>
-			</div>
+		<main hx-get="/main_content" hx-trigger="load" class="min-h-screen bg-indigo-100">
 		</main>
 		<footer class="bg-slate-700 py-6">
 			<div class="container mx-auto text-center text-white">
