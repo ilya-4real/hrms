@@ -1,6 +1,7 @@
 from datetime import date
 from sqlalchemy import Date, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from domain.entities.kpi import KPIRecord
 from gateways.postgres.base import BaseORM
 
 
@@ -16,3 +17,6 @@ class KPIRecordORM(BaseORM):
     employee_oid: Mapped[str] = mapped_column(ForeignKey("employees.oid"))
 
     employee: Mapped["EmployeeOrm"] = relationship(back_populates="kpi_records")  # noqa: F821
+
+    def to_entity(self) -> KPIRecord:
+        return KPIRecord(self.value, self.employee_oid, self.date_added, oid=self.oid)

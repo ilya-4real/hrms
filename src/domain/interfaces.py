@@ -9,10 +9,12 @@ from domain.entities.event import Event
 from domain.entities.kpi import KPIRecord
 
 
-class DepartmentGateway(ABC):
+class BaseGateway(ABC):
     def __init__(self, db_session: AsyncSession) -> None:
         self.db_session = db_session
 
+
+class DepartmentGateway(BaseGateway):
     @abstractmethod
     async def create_department(self, department: Department): ...
 
@@ -23,10 +25,7 @@ class DepartmentGateway(ABC):
     async def get_department_detail(self, department_id: str): ...
 
 
-class EmployeeGateway(ABC):
-    def __init__(self, db_session: AsyncSession) -> None:
-        self.db_session = db_session
-
+class EmployeeGateway(BaseGateway):
     @abstractmethod
     async def add_employee(self, employee: Employee) -> Employee: ...
 
@@ -45,30 +44,25 @@ class EmployeeGateway(ABC):
     async def update_employee(self, employee: Employee) -> Employee: ...
 
 
-class KPIGateway(ABC):
-    def __init__(self, db_session: AsyncSession) -> None:
-        self.db_session = db_session
-
+class KPIGateway(BaseGateway):
     @abstractmethod
     async def upsert_kpi_value(self, kpi_record: KPIRecord) -> None: ...
 
+    @abstractmethod
+    async def get_kpi_of_employee(self, employee_id: str) -> list[KPIRecord]: ...
 
-class EventGateway(ABC):
-    def __init__(self, db_session: AsyncSession) -> None:
-        self.db_session = db_session
+
+class EventGateway(BaseGateway):
+    @abstractmethod
+    async def create_event(self, event: Event) -> Event: ...
 
     @abstractmethod
-    async def create_event(self, event: Event) -> Event:
-        ...
+    async def get_current_events(self) -> list[Event]: ...
 
     @abstractmethod
-    async def get_current_events(self) -> list[Event]:
-        ...
+    async def delete_event(self, event_oid: str) -> None: ...
 
     @abstractmethod
-    async def delete_event(self, event_oid: str) -> None:
-        ...
-
-    @abstractmethod
-    async def get_events_history(self, limit: int = 0, offset: int = 10) -> list[Event]:
-        ...
+    async def get_events_history(
+        self, limit: int = 0, offset: int = 10
+    ) -> list[Event]: ...

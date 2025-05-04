@@ -13,8 +13,8 @@ all: storages app
 .PHONY: storages
 storages: storage_up migrate
 
-.PHONY: storage_up
-storage_up:
+.PHONY: storages-up
+storages-up:
 	docker compose -f $(STORAGE_YML) --env-file=$(ENV_DEV) up -d
 
 .PHONY: migrate

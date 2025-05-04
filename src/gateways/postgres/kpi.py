@@ -1,3 +1,5 @@
+from typing import override
+from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from domain.entities.kpi import KPIRecord
@@ -19,3 +21,14 @@ class SQLKPIGateway(KPIGateway):
             set_={"value": stmt.excluded.value},
         )
         await self.db_session.execute(stmt)
+
+    @override
+    async def get_kpi_of_employee(self, employee_id: str) -> list[KPIRecord]:
+        query = (
+            select(KPIRecordORM)
+            .where(KPIRecordORM.employee_oid == employee_id)
+            .order_by(KPIRecordORM.date_added.desc())
+        )
+        result = await self.db_session.execute(query)
+        records = result.scalars().all()
+        return [record.to_entity() for record in records]

@@ -15,6 +15,7 @@ from domain.usecases.employee import (
     UpdateEmployeeCommand,
     UpdateEmployeeUsecase,
 )
+from domain.usecases.kpi import GetEmployeesKPIList, GetEmployeesKPIListUseCase
 
 
 router = APIRouter(route_class=DishkaRoute, tags=["employees"], prefix="/employees")
@@ -91,3 +92,21 @@ async def update_employee(
     command = UpdateEmployeeCommand(employee_id, **employee.model_dump())
     empl = await usecase.execute(command)
     return templ.TemplateResponse(request, "employee_detail.html", {"employee": empl})
+
+
+@router.get("/{employee_id}/kpi")
+async def get_employee_kpi_history(
+    request: Request,
+    employee_id: str,
+    usecase: FromDishka[GetEmployeesKPIListUseCase],
+    templ: FromDishka[Jinja2Templates],
+):
+    command = GetEmployeesKPIList(employee_id)
+    log = await usecase.execute(command)
+    months_names = [month.strftime("%B") for month in log.months]
+    print(months_names)
+    return templ.TemplateResponse(
+        request,
+        "employee_kpi_chart.html",
+        context={"months": months_names, "values": log.values},
+    )

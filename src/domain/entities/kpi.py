@@ -20,6 +20,8 @@ class KPIRecord(BaseEntity):
 @dataclass
 class KPILog:
     records: list[KPIRecord]
+    months: list[date] = field(kw_only=True, default_factory=list)
+    values: list[int | None] = field(kw_only=True, default_factory=list)
 
     def build(self) -> list[KPIRecord]:
         timeline: list[KPIRecord] = []
@@ -31,9 +33,13 @@ class KPILog:
             should_be = dates_sequence.pop()
             if actual.last_date == should_be:
                 timeline.append(actual)
+                self.months.append(actual.last_date)
+                self.values.append(actual.value)
             else:
                 self.records.append(actual)
                 timeline.append(KPIRecord(None, employee_id, should_be))
+                self.months.append(should_be)
+                self.values.append(None)
         return timeline
 
     @staticmethod
