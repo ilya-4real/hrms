@@ -1,0 +1,18 @@
+
+<canvas id="headcount_by_department"></canvas>
+<script>
+function InitHeadCountChart() {
+	let canvas = document.getElementById("headcount_by_department")
+	headcount_chart = new Chart(canvas, {
+		type: 'doughnut',
+		data: {
+			labels: {{department_names | tojson}},
+			datasets: [{
+				label: "Headcount by departments",
+				data: {{counts | tojson}}
+			}]
+		}
+	})
+}
+InitHeadCountChart()
+</script>

@@ -66,3 +66,13 @@ class EventGateway(BaseGateway):
     async def get_events_history(
         self, limit: int = 0, offset: int = 10
     ) -> list[Event]: ...
+
+
+class StatsGateway(BaseGateway):
+    @abstractmethod
+    async def get_count_by_department(self) -> dict[str, int]:
+        ...
+
+    @abstractmethod
+    async def get_employees_stats(self) -> dict[str, int]:
+        ...

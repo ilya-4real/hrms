@@ -1,6 +1,7 @@
 from application.api.v1.departments.router import router as dep_router
 from application.api.v1.employees.router import router as empl_router
 from application.api.v1.events.router import router as events_router
+from application.api.v1.stats.router import router as stats_router
 from config.contanier import container
 from config.settings import AppSettings
 from dishka.integrations.fastapi import setup_dishka
@@ -24,6 +25,7 @@ def get_app() -> FastAPI:
     app.include_router(dep_router)
     app.include_router(empl_router)
     app.include_router(events_router)
+    app.include_router(stats_router)
     setup_dishka(container, app)
     return app
 

@@ -2,6 +2,8 @@
 	<div class="w-[60%] bg-white shadow-lg p-6 mt-6">
 		<h2 class="text-center text-xl text-gray-600">History of events</h2>
 		{% include "events_list.html" %}
-		<button class="py-2 px-4 rounded-lg bg-indigo-400 text-white hover:bg-blue-600">Load more</button>
+		<div id="replaceMe"></div>
+		<div id="TODO">need to fix this loading</div>
+		<button hx-get="/events/?page=2" hx-target="#replaceMe" hx-swap="outerHTML" class="py-2 px-4 rounded-lg bg-indigo-400 text-white hover:bg-blue-600">Load more</button>
 	</div>
 </div>
