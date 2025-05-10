@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 from dishka.integrations.fastapi import DishkaRoute, FromDishka
 from fastapi.templating import Jinja2Templates
 
-from domain.usecases.stats import GetCountByDepartment, GetCountByDepartmentUseCase
+from domain.usecases.stats import GetCompanyStats, GetCompanyStatsUsecase, GetCountByDepartment, GetCountByDepartmentUseCase
 
 
 router = APIRouter(route_class=DishkaRoute, prefix="/statistics", tags=["statistics"])
@@ -23,3 +23,14 @@ async def employee_count_by_department(
         "headcount_chart.html",
         context={"department_names": department_names, "counts": counts},
     )
+
+
+@router.get("/company_stats")
+async def get_company_statistics(
+    request: Request,
+    usecase: FromDishka[GetCompanyStatsUsecase],
+    templ: FromDishka[Jinja2Templates],
+): 
+    command = GetCompanyStats()
+    statistics = await usecase.execute(command)
+    return templ.TemplateResponse(request, "statistics.html", context={"statistics": statistics})

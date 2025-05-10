@@ -19,7 +19,7 @@ from domain.usecases.employee import (
 )
 from domain.usecases.event import CreateEventUseCase, DeleteEventUsecase, GetCurrentEventsUseCase, GetEventsHistoryUseCase
 from domain.usecases.kpi import GetEmployeesKPIListUseCase
-from domain.usecases.stats import GetCountByDepartmentUseCase
+from domain.usecases.stats import GetCompanyStatsUsecase, GetCountByDepartmentUseCase
 from gateways.postgres.department import SQLDepartmentGateway
 from gateways.postgres.employee import SQLEmployeeGateway
 from gateways.postgres.event import SQLEventGateway
@@ -152,4 +152,10 @@ class AppProvider(Provider):
         stats_gateway = SQLStatsGateway(db_session)
         return GetCountByDepartmentUseCase(stats_gateway, db_session)
 
+    @provide(scope=Scope.REQUEST)
+    async def get_company_stats_usecase(
+            self, db_session: AsyncSession
+    ) -> GetCompanyStatsUsecase:
+        stats_gateway = SQLStatsGateway(db_session)
+        return GetCompanyStatsUsecase(stats_gateway, db_session)
 container = make_async_container(AppProvider())

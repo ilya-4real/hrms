@@ -22,16 +22,18 @@ class SQLStatsGateway(StatsGateway):
         return stats
 
     @override
-    async def get_employees_stats(self) -> dict[str, int]:
+    async def get_company_stats(self) -> dict[str, int]:
         subquery = select(func.count(DepartmentORM.oid)).scalar_subquery()
         query = select(
-            subquery.label("department_count"),
-            func.count(EmployeeOrm.oid).label("employee_headcount"),
-            func.count().filter(EmployeeOrm.workload == "Fulltime").label("fulltime_employees"),
-            func.count().filter(EmployeeOrm.work_location == "Remote").label("remote_employees"),
+            subquery.label("Departments count"),
+            func.count(EmployeeOrm.oid).label("Employee headcount"),
+            func.count().filter(EmployeeOrm.workload == "Fulltime").label("Fulltime employees"),
+            func.count().filter(EmployeeOrm.work_location == "Remote").label("Remote employees"),
         )
 
         result = await self.db_session.execute(query)
-        print(result.all())
-        return {"query": 0}
+        statistics = {}
+        for key, value in zip(result.keys(), result.one()):
+            statistics[key] = value
+        return statistics
 

@@ -74,5 +74,5 @@ class StatsGateway(BaseGateway):
         ...
 
     @abstractmethod
-    async def get_employees_stats(self) -> dict[str, int]:
+    async def get_company_stats(self) -> dict[str, int]:
         ...
