@@ -1,4 +1,6 @@
 from typing import Sequence, override
+
+from sqlalchemy.orm import selectinload
 from domain.entities.department import Department
 from domain.interfaces import DepartmentGateway
 from gateways.postgres.models.department import DepartmentORM
@@ -12,7 +14,7 @@ class SQLDepartmentGateway(DepartmentGateway):
 
     @override
     async def get_all_departments(self) -> Sequence[Department]:
-        query = select(DepartmentORM)
+        query = select(DepartmentORM).options(selectinload(DepartmentORM.employees))
         result = await self.db_session.execute(query)
         res = result.scalars().all()
         return [department.to_entity() for department in res]

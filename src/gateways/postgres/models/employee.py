@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Date, ForeignKey, String
 from sqlalchemy.dialects.postgresql import ENUM as PGENUM
 
+from domain.entities.department import Department
 from domain.entities.employee import Employee, WorkLocation, Workload
 from gateways.postgres.base import BaseORM
 from gateways.postgres.models.kpi_records import KPIRecordORM
@@ -63,5 +64,6 @@ class EmployeeOrm(BaseORM):
             email_address=self.email_address,
             sm_link=self.sm_link,
             department_id=self.department_id,
-            department=self.department.to_entity()
+            department=Department(self.department.name, oid=self.department_id),
+            current_kpi=self.current_kpi
         )

@@ -30,16 +30,16 @@
 		</div>
 
 	</div>
-	<div class="rounded-xl bg-sky-50 py-4 px-2" title="75% of KPI achieved">
+	<div class="rounded-xl bg-sky-50 py-4 px-2" title="{{employee.current_kpi}}% of KPI achieved">
 		<p class="font-medium mb-2 text-gray-700">Tasks completed this months</p>
 		<div class="flex items-center gap-4">
 			<!-- Current KPI Value -->
 			<div class="text-gray-700">
-				75 <!-- Replace with dynamic value -->
+				{{employee.current_kpi}} <!-- Replace with dynamic value -->
 			</div>
 
 			<div class="flex-1 bg-gray-200 rounded-full h-2.5">
-				<div class="bg-indigo-300 h-2.5 rounded-full" style="width: 75%;"></div>
+				<div class="bg-indigo-300 h-2.5 rounded-full" style="width: {{employee.current_kpi}}%;"></div>
 			</div>
 
 			<!-- Goal -->

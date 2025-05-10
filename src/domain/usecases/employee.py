@@ -141,7 +141,8 @@ class UpdateEmployeeUsecase(BaseUseCase[UpdateEmployeeCommand, Employee]):
             email_address=command.email,
             sm_link=command.sm_link,
             workload=command.workload,
-            work_location=command.work_location
+            work_location=command.work_location,
+            current_kpi=command.kpi_value
         )
         kpi_record = KPIRecord(command.kpi_value, command.employee_oid)
         await self.employee_gateway.update_employee(employee)

@@ -1,15 +1,20 @@
 <form hx-put="employees/{{employee.oid}}" hx-target="main">
 	<h2 class="text-xl font-semibold text-gray-800">
-		<input type="text" name="first_name" value="{{employee.first_name}}">
-		<input type="text" name="second_name" value="{{employee.second_name}}">
+		<input type="text" name="first_name" value="{{employee.first_name}}" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+		<input type="text" name="second_name" value="{{employee.second_name}}" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
 	</h2>
-	<p>
+	<p class="mt-5">
 		<span class="font-medium">
-			<select hx-get="/departments/options" hx-target="this" hx-swap="innerHTML" hx-trigger="load" class="rounded border border-gray-300 p-1" name="department_id">
-				<option value="none">loading...</option>
+			<select hx-get="/departments/options" hx-target="#replaceMe" hx-swap="outerHTML" hx-trigger="load" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" name="department_id">
+				<optgroup label="current department">
+					<option value="{{employee.department.oid}}" selected>{{employee.department.name}}</option>
+				</optgroup>
+				<optgroup label="choices">
+					<option value="none" id="replaceMe">loading...</option>
+				</optgroup>
 			</select>
 		</span> 
-		/ <input class="rounded border border-gray-300 p-1" name="job_title" type="text" value="{{employee.job_title}}">
+		/ <input name="job_title" type="text" value="{{employee.job_title}}" class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
 	</p>
 	<div class="flex gap-8 my-5">
 		<!-- First Div: General Employee Info -->
@@ -17,25 +22,25 @@
 			<div class="space-y-2 text-gray-600">
 				<p>
 					<span class="font-medium">Salary: </span>
-					<input class="rounded border border-gray-300 p-1" type="number" name="salary" value="{{employee.salary}}">
+					<input class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" type="number" name="salary" value="{{employee.salary}}">
 				</p>
 				<p>
 					<span class="font-medium">Award:</span>
-					<input class="rounded border border-gray-300 p-1" type="number" name="award" value="{{employee.award}}">
+					<input class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" type="number" name="award" value="{{employee.award}}">
 				</p>
 				<p>
 					<span class="font-medium">Workload:</span> 
-					<select class="rounded border border-gray-300 p-1" name="workload" value="{{employee.workload}}">
-						<option value="fulltime">Fulltime</option>
-						<option value="parttime">parttime</option>
+					<select class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" name="workload">
+						<option value="fulltime" {{'selected' if employee.workload.value == "fulltime"}}>Fulltime</option>
+						<option value="parttime" {{'selected' if employee.workload.value == "parttime"}}>parttime</option>
 					</select>
 				</p>
 				<p>
 					<span class="font-medium">Work Location:</span>
-					<select class="rounded border border-gray-300 p-1" name="work_location" value="{{employee.work_location}}">
-						<option value="remote">Remote</option>
-						<option value="office">Office</option>
-						<option value="hybrid">Hybrid</option>
+					<select class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" name="work_location">
+						<option value="remote" {{'selected' if employee.work_location.value == "remote"}}>Remote</option>
+						<option value="office" {{'selected' if employee.work_location.value == "office"}}>Office</option>
+						<option value="hybrid" {{'selected' if employee.work_location.value == "hybrid"}}>Hybrid</option>
 					</select>
 				</p>
 			</div>
@@ -45,20 +50,20 @@
 			<div class="space-y-2 text-gray-600">
 				<p>
 					<span class="font-medium">Email:</span>
-					<input class="rounded border border-gray-300 p-1" type="email" name="email" value="{{employee.email_address}}">
+					<input class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" type="email" name="email" value="{{employee.email_address}}">
 				</p>
 				<p>
 					<span class="font-medium">Social Media:</span>
-					<input class="rounded border border-gray-300 p-1" type="url" name="sm_link" value="{{employee.sm_link}}">
+					<input class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" type="url" name="sm_link" value="{{employee.sm_link}}">
 				</p>
 				<p><span class="font-medium">Hire Date:</span>{{employee.hire_date}}</p>
 			</div>
 		</div>
 
 	</div>
-	<div class="rounded-xl bg-sky-50 py-4 px-2" title="75% of KPI achieved">
+	<div class="rounded-xl bg-sky-50 py-4 px-2" title="Set current employee's KPI">
 		<p class="font-medium mb-2 text-gray-700">KPI</p>
-		<input class="w-full" type="range" name="kpi_value" value="75" min="0" max="100">
+		<input class="w-full" type="range" name="kpi_value" value="{{employee.current_kpi}}" min="0" max="100">
 		<output name="range_kpi" for="kpi">75</output>
 		<div class="flex items-center gap-4">
 		</div>
@@ -66,7 +71,7 @@
 	<div class="flex mt-3">
 		<div class="mx-auto">
 			<button type="submit" class="w-30 bg-indigo-500 px-4 mx-5 py-1 text-white rounded">Save</button>
-			<button class="w-30 bg-red-600 px-4 py-1 text-white rounded">Cancel</button>
+			<button hx-get="employees/{{employee.oid}}" hx-swap="main" class="w-30 bg-red-600 px-4 py-1 text-white rounded">Cancel</button>
 		</div>
 	</div>
 </form>

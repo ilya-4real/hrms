@@ -56,7 +56,8 @@ class SQLEmployeeGateway(EmployeeGateway):
             salary=employee.salary,
             award=employee.award,
             workload=employee.workload,
-            work_location=employee.work_location
+            work_location=employee.work_location,
+            current_kpi=employee.current_kpi
         )
         await self.db_session.execute(stmt)
         return employee

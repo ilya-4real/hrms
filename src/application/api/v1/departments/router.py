@@ -26,6 +26,7 @@ async def get_departments(
 ):
     command = GetAllDepartmentsCommand()
     deps = await usecase.execute(command)
+    print(deps[0])
     return templ.TemplateResponse(
         request, "departments.html", context={"departments": deps}
     )

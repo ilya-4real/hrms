@@ -26,7 +26,7 @@
 				{% for dep in departments %}
 				<div hx-get="departments/{{dep.oid}}/employees?page=1" hx-trigger="click" hx-target="main" class="bg-white p-6 rounded-lg shadow-lg hover:bg-gray-100">
 					<h3 class="text-lg font-bold mb-2">{{dep.name}}</h3>
-					<p class="text-gray-600">Employees: 3</p>
+					<p class="text-gray-600">Employees: {{dep.employees|length}}</p>
 				</div>
 				{% endfor %}
 				<div class="bg-white rounded-lg shadow-md border-3 border-dashed border-indigo-300 p-6">
