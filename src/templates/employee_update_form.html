@@ -63,11 +63,19 @@
 	</div>
 	<div class="rounded-xl bg-sky-50 py-4 px-2" title="Set current employee's KPI">
 		<p class="font-medium mb-2 text-gray-700">KPI</p>
-		<input class="w-full" type="range" name="kpi_value" value="{{employee.current_kpi}}" min="0" max="100">
-		<output name="range_kpi" for="kpi">75</output>
+		<input id="kpi_slider" class="w-full" type="range" name="kpi_value" value="{{employee.current_kpi}}" min="0" max="100">
+		<output name="range_kpi" id="kpi_value">75</output>
 		<div class="flex items-center gap-4">
 		</div>
 	</div>
+	<script>
+		const slider = document.getElementById("kpi_slider")
+		const slider_value = document.getElementById("kpi_value")
+
+		slider.addEventListener("input", function(){
+			slider_value.textContent = this.value;
+		})
+	</script>
 	<div class="flex mt-3">
 		<div class="mx-auto">
 			<button type="submit" class="w-30 bg-indigo-500 px-4 mx-5 py-1 text-white rounded">Save</button>

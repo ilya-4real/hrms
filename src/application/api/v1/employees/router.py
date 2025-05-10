@@ -21,6 +21,11 @@ from domain.usecases.kpi import GetEmployeesKPIList, GetEmployeesKPIListUseCase
 router = APIRouter(route_class=DishkaRoute, tags=["employees"], prefix="/employees")
 
 
+@router.get("/page")
+async def get_employees_page(request: Request, templ: FromDishka[Jinja2Templates]):
+    return templ.TemplateResponse(request, "employees_page.html")
+
+
 @router.post("")
 async def add_employee(
     request: Request,
@@ -43,11 +48,14 @@ async def get_all_employees(
     templ: FromDishka[Jinja2Templates],
 ):
     limit, offset = paginator.get_limit_and_offset()
+    next_page = paginator.page + 1
     command = GetAllEmployeesCommand(offset, limit)
     employees = await usecase.execute(command)
     print(employees)
     return templ.TemplateResponse(
-        request, "employees.html", context={"employees": employees}
+        request,
+        "employee_list.html",
+        context={"employees": employees, "next_page": next_page},
     )
 
 

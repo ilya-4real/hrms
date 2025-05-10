@@ -46,6 +46,14 @@ async def get_current_events(
         request, "events_list.html", context={"events": events}
     )
 
+@router.get("/history_page")
+
+async def get_events_history_page(
+    request: Request,
+    templ: FromDishka[Jinja2Templates],
+):
+    return templ.TemplateResponse(request, "events_history.html")
+
 
 @router.get("/")
 async def get_events_history(
@@ -53,10 +61,14 @@ async def get_events_history(
     paginator: Annotated[Paginator, Query()],
     usecase: FromDishka[GetEventsHistoryUseCase],
     templ: FromDishka[Jinja2Templates],
-): 
+):
     command = GetEventsHistoryCommand(*paginator.get_limit_and_offset())
     events = await usecase.execute(command)
-    return templ.TemplateResponse(request, "events_history.html", context={"events": events})
+    return templ.TemplateResponse(
+        request,
+        "events_list.html",
+        context={"events": events, "loadable": True, "next_page": paginator.page + 1},
+    )
 
 
 @router.delete("/{event_oid}")

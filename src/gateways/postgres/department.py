@@ -6,6 +6,8 @@ from domain.interfaces import DepartmentGateway
 from gateways.postgres.models.department import DepartmentORM
 from sqlalchemy import select
 
+from gateways.postgres.models.employee import EmployeeOrm
+
 
 class SQLDepartmentGateway(DepartmentGateway):
     @override
@@ -20,4 +22,12 @@ class SQLDepartmentGateway(DepartmentGateway):
         return [department.to_entity() for department in res]
 
     @override
-    async def get_department_detail(self, department_id: str): ...
+    async def get_department_detail(self, department_id: str) -> Department:
+        query = (
+            select(DepartmentORM)
+            .where(DepartmentORM.oid == department_id)
+            .options(selectinload(DepartmentORM.employees))
+        )
+        result = await self.db_session.execute(query)
+        department = result.scalar_one()
+        return department.to_entity()

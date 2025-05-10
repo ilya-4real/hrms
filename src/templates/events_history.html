@@ -1,9 +1,8 @@
 <div class="flex justify-center items-center">
-	<div class="w-[60%] bg-white shadow-lg p-6 mt-6">
-		<h2 class="text-center text-xl text-gray-600">History of events</h2>
-		{% include "events_list.html" %}
-		<div id="replaceMe"></div>
-		<div id="TODO">need to fix this loading</div>
-		<button hx-get="/events/?page=2" hx-target="#replaceMe" hx-swap="outerHTML" class="py-2 px-4 rounded-lg bg-indigo-400 text-white hover:bg-blue-600">Load more</button>
+	<div class="w-[60%] bg-white shadow-lg p-6 mt-6" hx-get="/events/?page=1" hx-target="#events" hx-swap="outerHTML" hx-trigger="load">
+		<h2 class="text-center text-xl font-bold mb-3">History of events</h2>
+		<div id="events">
+
+		</div>
 	</div>
 </div>

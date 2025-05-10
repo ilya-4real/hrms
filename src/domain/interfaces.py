@@ -22,7 +22,7 @@ class DepartmentGateway(BaseGateway):
     async def get_all_departments(self) -> Sequence[Department]: ...
 
     @abstractmethod
-    async def get_department_detail(self, department_id: str): ...
+    async def get_department_detail(self, department_id: str) -> Department: ...
 
 
 class EmployeeGateway(BaseGateway):
@@ -75,4 +75,8 @@ class StatsGateway(BaseGateway):
 
     @abstractmethod
     async def get_company_stats(self) -> dict[str, int]:
+        ...
+
+    @abstractmethod
+    async def get_employees_stats(self) -> dict[str, int]:
         ...

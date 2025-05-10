@@ -18,6 +18,15 @@ from domain.usecases.employee import (
 router = APIRouter(route_class=DishkaRoute, prefix="/departments", tags=["departments"])
 
 
+@router.get("/{department_id}/detail")
+async def get_department_detail(
+    request: Request, department_id: str, templ: FromDishka[Jinja2Templates]
+):
+    return templ.TemplateResponse(
+        request, "department_detail.html", context={"department_id": department_id}
+    )
+
+
 @router.get("")
 async def get_departments(
     request: Request,
@@ -50,12 +59,13 @@ async def create_deaprtment(
     department_name: Annotated[str, Form()],
     request: Request,
     usecase: FromDishka[CreateDeaprtmentUseCase],
-    templ: FromDishka[Jinja2Templates]
+    templ: FromDishka[Jinja2Templates],
 ):
     command = CreateDeaprtmentCommand(department_name)
     department = await usecase.execute(command)
-    return templ.TemplateResponse(request, "department_card.html", context={"department": department})
-
+    return templ.TemplateResponse(
+        request, "department_card.html", context={"department": department}
+    )
 
 
 @router.get("/{department_id}/employees")
@@ -67,9 +77,16 @@ async def get_department_employees(
     templ: FromDishka[Jinja2Templates],
 ):
     limit, offset = paginator.get_limit_and_offset()
+    next_page = paginator.page + 1
     command = GetEmployeesByDepartmentCommand(department_id, limit, offset)
-    employees = await usecase.execute(command)
-    print(employees)
+    department = await usecase.execute(command)
+    employees = department.employees
     return templ.TemplateResponse(
-        request, "employee_list.html", context={"employees": employees}
+        request,
+        "employee_list.html",
+        context={
+            "employees": employees,
+            "next_page": next_page,
+            "department": department,
+        },
     )

@@ -16,7 +16,7 @@
 			<nav class="container mx-auto flex justify-center space-x-30">
 				<a href="/main_content" hx-get="/main_content" hx-target="main" class="text-gray-600 hover:text-black">General</a>
 				<a href="/departments" hx-get="/departments" hx-target="main" hx-swap="outerHTML" class="text-gray-600 hover:text-black" >Departments</a>
-				<a href="/employees" hx-get="/employees?page=1" hx-target="main" hx-swap="outerHTML" class="text-gray-600 hover:text-black">Employees</a>
+				<a href="/employees/page" hx-get="/employees/page" hx-target="main" hx-swap="outerHTML" class="text-gray-600 hover:text-black">Employees</a>
 			</nav>
 		</header>
 		<main hx-get="/main_content" hx-trigger="load" class="min-h-screen bg-indigo-100">

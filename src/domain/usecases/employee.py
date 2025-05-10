@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from typing import Sequence, override
 
+from domain.entities.department import Department
 from domain.entities.employee import Employee, WorkLocation, Workload
 from domain.entities.kpi import KPIRecord
-from domain.interfaces import EmployeeGateway, KPIGateway
+from domain.interfaces import DepartmentGateway, EmployeeGateway, KPIGateway
 from domain.usecases.base import BaseCommand, BaseUseCase, DBSession
 
 
@@ -89,20 +90,21 @@ class GetEmployeesByDepartmentCommand(BaseCommand):
 
 @dataclass
 class GetEmployeesByDepartmentUseCase(
-    BaseUseCase[GetEmployeesByDepartmentCommand, Sequence[Employee]]
+    BaseUseCase[GetEmployeesByDepartmentCommand, Department]
 ):
-    gateway: EmployeeGateway
+    empl_gateway: EmployeeGateway
+    dep_gateway: DepartmentGateway
     db_session: DBSession
 
     @override
-    async def execute(
-        self, command: GetEmployeesByDepartmentCommand
-    ) -> Sequence[Employee]:
-        employees = await self.gateway.get_employees_by_department(
+    async def execute(self, command: GetEmployeesByDepartmentCommand) -> Department:
+        employees = await self.empl_gateway.get_employees_by_department(
             command.department_id, command.limit, command.offset
         )
+        department = await self.dep_gateway.get_department_detail(command.department_id)
+        department.employees = list(employees)
         await self.db_session.rollback()
-        return employees
+        return department
 
 
 @dataclass
@@ -142,7 +144,7 @@ class UpdateEmployeeUsecase(BaseUseCase[UpdateEmployeeCommand, Employee]):
             sm_link=command.sm_link,
             workload=command.workload,
             work_location=command.work_location,
-            current_kpi=command.kpi_value
+            current_kpi=command.kpi_value,
         )
         kpi_record = KPIRecord(command.kpi_value, command.employee_oid)
         await self.employee_gateway.update_employee(employee)

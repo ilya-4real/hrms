@@ -1,15 +1,21 @@
-<div id="events" class="my-5">
-	{% for event in events %}
-	<div id="{{ event.oid }}" class="flex justify-between bg-indigo-50 p-4 rounded-lg mb-4" hx-target="this">
-		<p class="text-lg text-gray-600">{{ event.title }}</p>
-		<div class="text-blue-500 flex">
-			<p class="mr-5">{{ event.starts_at.strftime("%B %d, %I:%M %p") }}</p>
-			<button hx-delete="/events/{{event.oid}}" hx-confirm="Are you sure you want to delete this event?" hx-swap="outerHTML">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-				</svg>
-			</button>
-		</div>
+{% if events %}
+{% for event in events %}
+<div id="{{ event.oid }}" class="flex justify-between bg-indigo-50 p-4 rounded-lg mb-4" hx-target="this">
+	<p class="text-lg text-gray-600">{{ event.title }}</p>
+	<div class="text-blue-500 flex">
+		<p class="mr-5">{{ event.starts_at.strftime("%B %d, %I:%M %p") }}</p>
+		<button class="hover:bg-indigo-200 rounded-xl" hx-delete="/events/{{event.oid}}" hx-confirm="Are you sure you want to delete this event?" hx-swap="outerHTML">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+			</svg>
+		</button>
 	</div>
-	{% endfor %}
 </div>
+{% endfor %}
+{% if loadable %}
+<button hx-get="/events/?page={{next_page}}" hx-target="this" hx-swap="outerHTML" class="py-2 px-4 rounded-lg bg-indigo-500 text-white hover:bg-blue-600">Load more</button>
+{% else %}
+{%endif%}
+{% else %}
+<button class="bg-gray-500 py-2 px-4 rounded-lg text-white" disabled>Nothing to load</button>
+{% endif %}

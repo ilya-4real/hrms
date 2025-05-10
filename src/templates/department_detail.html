@@ -1,0 +1,10 @@
+<main class="pt-5 bg-indigo-100 min-h-screen">
+	<div class="flex">
+		<div class="bg-white rounded-lg w-3/5 mx-auto mt-5 p-6 shadow-lg" hx-target="#empl_container" hx-get="/departments/{{department_id}}/employees?page=1" hx-trigger="load">
+			<h2 class="text-xl font-bold mb-4">Employees</h2>
+			<div id="empl_container" class="space-y-5">
+				<h2>Loading..</h2>
+			</div>
+		</div>
+	</div>
+</main>

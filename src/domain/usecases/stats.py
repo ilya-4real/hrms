@@ -33,3 +33,18 @@ class GetCompanyStatsUsecase(BaseUseCase):
         result =  await self.stats_gateway.get_company_stats()
         await self.db_session.rollback()
         return result
+
+@dataclass
+class GetEmployeeStats(BaseCommand): ...
+
+
+@dataclass
+class GetEmployeeStatsUseCase(BaseUseCase):
+    stats_gateway: StatsGateway
+    db_session: DBSession
+
+    @override
+    async def execute(self, command: GetEmployeeStats) -> dict[str, int]:
+        result =  await self.stats_gateway.get_employees_stats()
+        await self.db_session.rollback()
+        return result

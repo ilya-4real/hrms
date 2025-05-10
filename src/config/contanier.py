@@ -17,9 +17,14 @@ from domain.usecases.employee import (
     GetEmployeesByDepartmentUseCase,
     UpdateEmployeeUsecase,
 )
-from domain.usecases.event import CreateEventUseCase, DeleteEventUsecase, GetCurrentEventsUseCase, GetEventsHistoryUseCase
+from domain.usecases.event import (
+    CreateEventUseCase,
+    DeleteEventUsecase,
+    GetCurrentEventsUseCase,
+    GetEventsHistoryUseCase,
+)
 from domain.usecases.kpi import GetEmployeesKPIListUseCase
-from domain.usecases.stats import GetCompanyStatsUsecase, GetCountByDepartmentUseCase
+from domain.usecases.stats import GetCompanyStatsUsecase, GetCountByDepartmentUseCase, GetEmployeeStatsUseCase
 from gateways.postgres.department import SQLDepartmentGateway
 from gateways.postgres.employee import SQLEmployeeGateway
 from gateways.postgres.event import SQLEventGateway
@@ -98,8 +103,9 @@ class AppProvider(Provider):
     async def get_employee_by_dep_usecase(
         self, db_session: AsyncSession
     ) -> GetEmployeesByDepartmentUseCase:
-        gateway = SQLEmployeeGateway(db_session)
-        return GetEmployeesByDepartmentUseCase(gateway, db_session)
+        empl_gateway = SQLEmployeeGateway(db_session)
+        dep_gateway = SQLDepartmentGateway(db_session)
+        return GetEmployeesByDepartmentUseCase(empl_gateway, dep_gateway, db_session)
 
     @provide(scope=Scope.REQUEST)
     async def update_employee_usecase(
@@ -108,54 +114,61 @@ class AppProvider(Provider):
         empl_gateway = SQLEmployeeGateway(db_session)
         kpi_gateway = SQLKPIGateway(db_session)
         return UpdateEmployeeUsecase(empl_gateway, kpi_gateway, db_session)
-    
+
     @provide(scope=Scope.REQUEST)
     async def create_event_usecase(
-            self, db_session: AsyncSession
+        self, db_session: AsyncSession
     ) -> CreateEventUseCase:
         event_gateway = SQLEventGateway(db_session)
         return CreateEventUseCase(event_gateway, db_session)
 
     @provide(scope=Scope.REQUEST)
     async def get_current_events_usecase(
-            self, db_session: AsyncSession
+        self, db_session: AsyncSession
     ) -> GetCurrentEventsUseCase:
         event_gateway = SQLEventGateway(db_session)
         return GetCurrentEventsUseCase(event_gateway, db_session)
 
-
     @provide(scope=Scope.REQUEST)
     async def delete_event_usecase(
-            self, db_session: AsyncSession
+        self, db_session: AsyncSession
     ) -> DeleteEventUsecase:
         event_gateway = SQLEventGateway(db_session)
         return DeleteEventUsecase(event_gateway, db_session)
 
     @provide(scope=Scope.REQUEST)
     async def get_events_history_usecase(
-            self, db_session: AsyncSession
+        self, db_session: AsyncSession
     ) -> GetEventsHistoryUseCase:
         event_gateway = SQLEventGateway(db_session)
         return GetEventsHistoryUseCase(event_gateway, db_session)
 
     @provide(scope=Scope.REQUEST)
     async def get_kpi_history_usecase(
-            self, db_session: AsyncSession
+        self, db_session: AsyncSession
     ) -> GetEmployeesKPIListUseCase:
         kpi_gateway = SQLKPIGateway(db_session)
         return GetEmployeesKPIListUseCase(kpi_gateway, db_session)
 
     @provide(scope=Scope.REQUEST)
     async def get_count_by_department_usecase(
-            self, db_session: AsyncSession
+        self, db_session: AsyncSession
     ) -> GetCountByDepartmentUseCase:
         stats_gateway = SQLStatsGateway(db_session)
         return GetCountByDepartmentUseCase(stats_gateway, db_session)
 
     @provide(scope=Scope.REQUEST)
     async def get_company_stats_usecase(
-            self, db_session: AsyncSession
+        self, db_session: AsyncSession
     ) -> GetCompanyStatsUsecase:
         stats_gateway = SQLStatsGateway(db_session)
         return GetCompanyStatsUsecase(stats_gateway, db_session)
+
+    @provide(scope=Scope.REQUEST)
+    async def get_employee_stats_usecase(
+        self, db_session: AsyncSession
+    ) -> GetEmployeeStatsUseCase:
+        stats_gateway = SQLStatsGateway(db_session)
+        return GetEmployeeStatsUseCase(stats_gateway, db_session)
+
 container = make_async_container(AppProvider())
